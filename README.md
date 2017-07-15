@@ -5,4 +5,4 @@ MybatisLearning
 
 
 
-<h1>Clink Here <a href="http://shuaizi.mylzs.cn">Login...</a></h1>
+<h1>Click Here <a href="http://shuaizi.mylzs.cn">Login...</a></h1>
