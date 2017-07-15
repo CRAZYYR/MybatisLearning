@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="test">
+<select id="FindByName" parameterType="String" resultType="com.mybatis.po.User">
+select * from user where username = #{name}
+</select>
+<select id="FindByLikeName" parameterType="String" resultType="com.mybatis.po.User">
+SELECT * FROM user WHERE username LIKE '%${value}%'
+</select>
+<insert id="InsertToUser" parameterType="com.mybatis.po.User">
+
+<selectKey keyProperty="id" resultType="int" order="AFTER">
+SELECT LAST_INSERT_ID()
+</selectKey>
+insert into user (username, birthday, sex) values (#{username},#{birthday},#{sex})
+</insert>
+<delete id="DeleteUserByName" parameterType="String">
+delete from user where username = #{name}
+</delete>
+</mapper>
