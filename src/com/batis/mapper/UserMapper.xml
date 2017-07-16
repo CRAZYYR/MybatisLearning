@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.batis.mapper.UserMapper">
+
+<sql id="usersql">
+
+
+			<if test="userCustom.sex !=null and userCustom.sex !='' ">
+				and user.sex=#{userCustom.sex}
+			</if>
+			<if test="userCustom.username !=null and userCustom.username !='' ">
+				and user.username like '%${userCustom.username}%'
+			</if>
+	
+</sql>
+
+	<resultMap type="user" id="UserMapId">
+		<id column="id_" property="id" />
+
+		<result column="username_" property="username" />
+
+	</resultMap>
+	<!-- 以ResultMap来映射结果集 -->
+	<select id="FindUserMap" parameterType="string" resultMap="UserMapId">
+		select id id_,username username_,sex from user
+		<where>
+			user.username like '%${value}%'
+		</where>
+	</select>
+	<!-- 用户信息综合查询 -->
+	<select id="FindUserList" parameterType="com.mybatis.po.UserQueryVo"
+		resultType="com.mybatis.po.UserCustom">
+		select * from user
+	<where>
+		<include refid="usersql"></include>
+	</where>
+
+	</select>
+	<!-- 进行数据总数查询 -->
+	<select id="FindUserCount" parameterType="com.mybatis.po.UserQueryVo"
+		resultType="int">
+		select COUNT(*) from user where user.sex=#{userCustom.sex} and user.username
+		like '%${userCustom.username}%'
+	</select>
+	<!-- 通过用户进行查询 -->
+	<select id="FindByName" parameterType="String" resultType="user">
+		select * from user where username = #{name}
+	</select>
+	<select id="FindByLikeName" parameterType="String" resultType="user">
+		SELECT * FROM user WHERE username LIKE '%${value}%'
+	</select>
+	<insert id="InsertToUser" parameterType="user">
+
+		<selectKey keyProperty="id" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into user (username, birthday, sex) values
+		(#{username},#{birthday},#{sex})
+	</insert>
+	<delete id="DeleteUserByName" parameterType="String">
+		delete from user where username = #{name}
+	</delete>
+</mapper>
